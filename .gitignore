@@ -1,0 +1,16 @@
+# Secretos: nunca subas la clave de API
+.env
+
+# Archivos generados por Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Entornos virtuales
+.venv/

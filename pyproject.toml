@@ -1,0 +1,9 @@
+[project]
+name = "my-first-agent"
+version = "0.1.0"
+description = "A from-scratch coding agent loop for students (OpenAI Chat Completions, no frameworks)."
+readme = "README.md"
+requires-python = ">=3.15.2"
+dependencies = [
+    "openai",
+]
