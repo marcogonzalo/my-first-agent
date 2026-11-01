@@ -1,0 +1,4 @@
+# Project notes
+
+This file is a demo fixture for the coding agent lesson.
+The agent should be able to list, read, and summarize it.
