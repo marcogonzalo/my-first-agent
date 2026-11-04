@@ -8,7 +8,6 @@ jaula de rutas reales, rechazo de .env, timeout de comandos y entorno limpio.
 import json
 import os
 import subprocess
-from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -21,6 +20,9 @@ MAX_ITERATIONS = 15
 MAX_TOOL_OUTPUT = 4000
 # Tiempo máximo por comando: un proceso colgado no bloquea el agente para siempre.
 COMMAND_TIMEOUT_SECONDS = 10
+
+# Capturado al arrancar: el prompt dice "la carpeta desde la que lanzaste".
+WORK_ROOT = Path.cwd().resolve()
 
 # El modelo puede ignorar la frase de confirmación. La GUARDRAIL real está abajo.
 SYSTEM_PROMPT = """You are a coding agent running in the user's terminal.
@@ -111,12 +113,6 @@ TOOL_SCHEMAS = [
         },
     },
 ]
-
-# Capturado al arrancar: el prompt dice "la carpeta desde la que lanzaste".
-WORK_ROOT = Path.cwd().resolve()
-
-ApproveFn = Callable[[str], bool]
-
 
 # GUARDRAIL: jaula de rutas (realpath) + rechazo de .env.
 def resolve_in_work_root(path: str) -> Path | str:
@@ -234,16 +230,27 @@ TOOLS = {
     "run_command": run_command,
 }
 
-# Tools que exigen "ok" explícito antes de ejecutarse.
-DANGEROUS_TOOLS = frozenset({"write_file", "run_command"})
-
-
 # GUARDRAIL: recorta salidas largas para no hinchar el contexto.
 def truncate_output(text: str) -> str:
     if len(text) <= MAX_TOOL_OUTPUT:
         return text
     print("GUARDRAIL: truncando salida larga")
     return text[:MAX_TOOL_OUTPUT] + "\n...[output truncated]"
+
+
+def describe_action(name: str, arguments: dict) -> str:
+    if name == "write_file":
+        path = arguments.get("path", "?")
+        content = arguments.get("content", "")
+        preview = content if len(content) <= 120 else content[:120] + "..."
+        return f"write_file ruta={path!r} contenido={preview!r}"
+    if name == "run_command":
+        return f"run_command comando={arguments.get('command', '?')!r}"
+    return f"{name}({arguments})"
+
+
+# Tools que exigen "ok" explícito antes de ejecutarse.
+DANGEROUS_TOOLS = frozenset({"write_file", "run_command"})
 
 
 # GUARDRAIL: pide "ok" en la terminal antes de write/run.
@@ -259,22 +266,11 @@ def default_approve(action: str) -> bool:
     return answer.strip().lower() == "ok"
 
 
-def describe_action(name: str, arguments: dict) -> str:
-    if name == "write_file":
-        path = arguments.get("path", "?")
-        content = arguments.get("content", "")
-        preview = content if len(content) <= 120 else content[:120] + "..."
-        return f"write_file ruta={path!r} contenido={preview!r}"
-    if name == "run_command":
-        return f"run_command comando={arguments.get('command', '?')!r}"
-    return f"{name}({arguments})"
-
-
 # GUARDRAIL + despacho: aprueba tools peligrosas, llama la función, recorta salida.
 def execute_tool(
     name: str,
     arguments: dict,
-    approve: ApproveFn | None = None,
+    approve=None,
 ) -> str:
     print(f"→ Tootl call:{name}({arguments})")
     fn = TOOLS.get(name)
@@ -300,7 +296,7 @@ def run_agent(
     client: Any,
     messages: list[dict],
     *,
-    approve: ApproveFn | None = None,
+    approve=None,
     model: str = MODEL,
     max_iterations: int = MAX_ITERATIONS,
 ) -> str:

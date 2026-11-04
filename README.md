@@ -12,7 +12,7 @@ Este proyecto necesita **Python 3.15.2** y **uv**.
 # Instala uv si aún no lo tienes:
 # curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Preferible: CPython 3.15.2 oficial cuando uv pueda descargarlo:
+# Preferible: Python 3.15.2 oficial (CPython) cuando uv pueda descargarlo:
 uv python install 3.15.2
 uv python pin 3.15.2
 
