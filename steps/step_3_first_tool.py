@@ -120,7 +120,7 @@ def run_one_tool_round(client: OpenAI, messages: list[dict], user_text: str) -> 
 
     print(f"Agent: {final_message.content}")
     print()
-    print("=================================================================== ")
+    print("================================================================= ")
     print()
 
 

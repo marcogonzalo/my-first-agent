@@ -28,7 +28,8 @@ def load_env(path: Path | None = None) -> None:
 
 
 def check_api_key_exists() -> None:
-    # Sale con mensaje claro si falta la clave.
+    # Verifica que existe la clave de la API
+    # Sale con mensaje claro si no existe la clave.
     if not os.environ.get("OPENAI_API_KEY"):
         print("Missing OPENAI_API_KEY. Copy .env.example to .env and set the key.")
         sys.exit(1)
