@@ -97,7 +97,7 @@ Un diccionario `TOOLS` conecta nombre → función. `execute_tool` imprime la ll
 
 El mismo chat, más:
 
-- `write_file` y `run_command` preguntan `May I do this? Type yes to approve:`
+- `write_file` y `run_command` preguntan `Agente: ¿Puedo hacer esto? Escribe 'ok' para aprobar:`
 - Las rutas deben quedar dentro del directorio de lanzamiento (`realpath`, no solo el texto)
 - `.env` no se puede leer ni escribir con las herramientas de archivos
 - Los comandos tienen timeout de 10 s y un entorno sin `OPENAI_API_KEY`
