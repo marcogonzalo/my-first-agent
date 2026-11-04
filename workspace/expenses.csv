@@ -1,0 +1,21 @@
+id,category,amount,date
+1,alquiler,980.00,2026-10-01
+2,comida,23.45,2026-10-02
+3,transporte,3.20,2026-10-02
+4,comida,14.90,2026-10-03
+5,otros gastos,27.50,2026-10-04
+6,servicios,54.30,2026-10-05
+7,comida,41.20,2026-10-06
+8,transporte,18.00,2026-10-07
+9,otros gastos,8.99,2026-10-08
+10,comida,6.50,2026-10-09
+11,transporte,42.75,2026-10-11
+12,otros gastos,63.40,2026-10-12
+13,comida,52.10,2026-10-13
+14,servicios,39.95,2026-10-15
+15,otros gastos,15.00,2026-10-16
+16,comida,19.80,2026-10-18
+17,transporte,7.60,2026-10-20
+18,otros gastos,110.00,2026-10-22
+19,comida,28.35,2026-10-25
+20,otros gastos,4.50,2026-10-28
